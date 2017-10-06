@@ -24,7 +24,7 @@ public class SuccessKilled {
     private Date createTime;
 
     /** 修改时间*/
-    private Date entTime;
+    private Date updateTime;
 
     /** 多对一的映射*/
     private Seckill seckill;
