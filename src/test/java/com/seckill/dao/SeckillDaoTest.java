@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(SpringRunner.class)
 @Rollback
-@ContextConfiguration({"classpath:spring/spring.dao.xml"})
+@ContextConfiguration({"classpath:spring/spring-dao.xml"})
 public class SeckillDaoTest {
 
     @Autowired

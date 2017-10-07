@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  * 2017/10/7
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration({"classpath:spring/spring.dao.xml"})
+@ContextConfiguration({"classpath:spring/spring-dao.xml"})
 @Slf4j
 public class SuccessKilledDaoTest {
 
