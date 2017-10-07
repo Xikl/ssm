@@ -3,8 +3,6 @@ package com.seckill.service;
 import com.seckill.dto.Exposer;
 import com.seckill.dto.SeckillExecution;
 import com.seckill.entity.Seckill;
-import com.seckill.exception.RepeatException;
-import com.seckill.exception.SeckillColseException;
 import com.seckill.exception.SeckillException;
 
 import java.util.List;
