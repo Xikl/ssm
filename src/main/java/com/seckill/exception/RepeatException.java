@@ -5,13 +5,13 @@ package com.seckill.exception;
  * Created by 朱文赵
  * 2017/10/7
  */
-public class RepeaException extends  SeckillException{
+public class RepeatException extends  SeckillException{
 
-    public RepeaException(String message) {
+    public RepeatException(String message) {
         super(message);
     }
 
-    public RepeaException(String message, Throwable cause) {
+    public RepeatException(String message, Throwable cause) {
         super(message, cause);
     }
 }
