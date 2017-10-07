@@ -1,6 +1,7 @@
 package com.seckill.dao;
 
 import com.seckill.entity.Seckill;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,7 @@ public interface SeckillDao {
      * @param killTime
      * @return 表示影响的行数 0 不成功 ， >= 1 正常
      */
-    Integer reduceNumber(Long seckillId, Date killTime);
+    Integer reduceNumber(@Param("seckillId") Long seckillId, @Param("killTime") Date killTime);
 
     /**
      * 根据id查库存
@@ -30,10 +31,10 @@ public interface SeckillDao {
     /**
      * 根据偏移量查询商品列表
      * @param offset
-     * @param limit
+     * @param limit 加入@Param注解 告诉mybatis来传入该形参
      * @return
      */
-    List<Seckill> queryAll(Integer offset, Integer limit);
+    List<Seckill> queryAll(@Param("offset") Integer offset, @Param("limit") Integer limit);
 
 
 
