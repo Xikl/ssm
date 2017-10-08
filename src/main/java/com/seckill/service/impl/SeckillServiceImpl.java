@@ -15,6 +15,7 @@ import com.seckill.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -87,9 +88,16 @@ public class SeckillServiceImpl implements SeckillService{
      * @param userPhone 用户手机号
      * @param md5       用户地址
      * @throws SeckillException
+     * 使用声明式事务的优点
+     * 1.开发团队的达成一致约定，明确标注事务方法的编程风格
+     * 2.保证事务方法的执行时间要尽可能短， 同时不要穿插网络操作 比如http和tcp，如果非要的话可以剥离到事务方法之外
+     * 3.不是所得方法都需要事务，如只有一条写入操作或者只读
+     *
      */
     @Override
-    public SeckillExecution executeSeckill(Long seckillId, Long userPhone, String md5) throws SeckillException {
+    @Transactional
+    public SeckillExecution executeSeckill(Long seckillId, Long userPhone, String md5)
+                                                            throws SeckillException {
         if(md5 == null || ! md5.equals(MD5Util.getMd5(seckillId))){
             throw new SeckillException("seckill data rewite");
         }
