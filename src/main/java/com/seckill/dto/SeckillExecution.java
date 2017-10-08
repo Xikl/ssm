@@ -1,7 +1,7 @@
 package com.seckill.dto;
 
 import com.seckill.entity.SuccessKilled;
-import lombok.AllArgsConstructor;
+import com.seckill.enums.SeckillStateEnums;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class SeckillExecution {
 
     /** 秒杀商品id*/
@@ -27,11 +26,16 @@ public class SeckillExecution {
     /** 秒杀成功对象*/
     private SuccessKilled successKilled;
 
-    public SeckillExecution(Long seckillId, Integer state, String stateInfo) {
+    public SeckillExecution(Long seckillId, SeckillStateEnums seckillStateEnums) {
         this.seckillId = seckillId;
-        this.state = state;
-        this.stateInfo = stateInfo;
+        this.state = seckillStateEnums.getState();
+        this.stateInfo = seckillStateEnums.getStateInfo();
     }
 
-
+    public SeckillExecution(Long seckillId, SeckillStateEnums seckillStateEnums, SuccessKilled successKilled) {
+        this.seckillId = seckillId;
+        this.state = seckillStateEnums.getState();
+        this.stateInfo = seckillStateEnums.getStateInfo();
+        this.successKilled = successKilled;
+    }
 }
