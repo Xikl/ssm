@@ -15,7 +15,7 @@ public class SuccessKilled {
     private Long seckillId;
 
     /** 用户手机号*/
-    private Long uerPhone;
+    private Long userPhone;
 
     /**状态： -1 无效， 0 成功， 1 已付款， 2 已发货*/
     private Integer state;
