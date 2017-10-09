@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -31,6 +32,7 @@ public class SeckillController {
     @Autowired
     private SeckillService seckillService;
 
+
     @GetMapping("/list")
     public String list(Model model) {
         List<Seckill> seckillList = seckillService.getSeckillList();
@@ -38,6 +40,12 @@ public class SeckillController {
         return "list";
     }
 
+    /**
+     * 详情页
+     * @param seckillId
+     * @param model
+     * @return
+     */
     @GetMapping("/{seckillId}/detail")
     public String detail(@PathVariable("seckillId") Long seckillId, Model model) {
         if (seckillId == null) {
@@ -52,6 +60,11 @@ public class SeckillController {
         return "detail";
     }
 
+    /**
+     * 暴露秒杀接口
+     * @param seckillId
+     * @return
+     */
     @PostMapping(value = "/{seckillId}/exposer", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public SeckillResult<Exposer> exposer(@PathVariable("seckillId") Long seckillId) {
@@ -66,6 +79,13 @@ public class SeckillController {
         return result;
     }
 
+    /**
+     * 执行秒杀操作
+     * @param seckillId
+     * @param md5
+     * @param killPhone
+     * @return
+     */
     @PostMapping(value = "/{seckillId}/{md5}/execution", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") Long seckillId,
                                                    @PathVariable("md5") String md5,
@@ -79,10 +99,10 @@ public class SeckillController {
             result = new SeckillResult<>(true, seckillExecution);
         } catch (SeckillCloseException e) {
             SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStateEnums.END);
-            return new SeckillResult<>(false, seckillExecution);
+            result = new SeckillResult<>(false, seckillExecution);
         } catch (RepeatException e) {
             SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStateEnums.REPEAT_KILL);
-            return new SeckillResult<>(false, seckillExecution);
+            result = new SeckillResult<>(false, seckillExecution);
         } catch (SeckillException e) {
             log.error("【执行秒杀】 执行秒杀错误， message={}", e.getMessage());
             SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStateEnums.INNER_ERROR);
@@ -90,4 +110,15 @@ public class SeckillController {
         }
         return result;
     }
+
+    /**
+     * 获取当前时间
+     * @return 返回系统时间
+     */
+    @GetMapping("/time/now")
+    public SeckillResult<Long> time(){
+        Date now = new Date();
+        return new SeckillResult<>(true, now.getTime());
+    }
+
 }
