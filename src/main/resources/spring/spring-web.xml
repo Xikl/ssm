@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--配置spring-mvc-->
+    <!--开启SpringMvc的注解模式-->
+    <!--1.自动url的映射 @RequestMapping之类
+        2.数据绑定，数字和日期的格式化注解 @NumberFormat @DataTimeFormat
+        3.xml和json的默认读写支持-->
+    <mvc:annotation-driven/>
+
+    <!--servlet-mapping 的映射路径为 /-->
+    <!--静态资源默认servlet的配置
+        1.加入静态资源的配置 js png
+        2.允许使用一个 / 来做整体映射
+    -->
+    <mvc:default-servlet-handler/>
+
+    <!--配置视图文件为jsp-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INFO/jsp"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--开启扫描web的注解-->
+    <context:component-scan base-package="com.seckill.controller"/>
+
+</beans>

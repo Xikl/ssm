@@ -62,4 +62,26 @@ public class SeckillServiceTest {
         log.info("seckillExecution={}", seckillExecution);
     }
 
+    /**
+     * 将上述两个方法整合
+     * 一起进行测试
+     */
+    @Test
+    public void testSeckillLogic() throws Exception{
+        long id = 1000L;
+        long phone = 15088654692L;
+        //暴露秒杀接口 主要靠时间来判定
+        Exposer exposer = seckillService.exportSeckillUrl(id);
+        log.info("exposer={}", exposer);
+        if(exposer.isExposed()){
+            String md5 = exposer.getMd5();
+            SeckillExecution seckillExecution = seckillService.executeSeckill(id, phone, md5);
+            log.info("seckillExecution={}", seckillExecution);
+        }else{
+            log.warn("秒杀未开启 exposer={}", exposer);
+        }
+
+    }
+
+
 }
