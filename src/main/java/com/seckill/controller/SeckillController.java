@@ -87,6 +87,7 @@ public class SeckillController {
      * @return
      */
     @PostMapping(value = "/{seckillId}/{md5}/execution", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
     public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId") Long seckillId,
                                                    @PathVariable("md5") String md5,
                                                    @CookieValue(value = "killPhone", required = false) Long killPhone) {
