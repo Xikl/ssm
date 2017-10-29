@@ -116,6 +116,7 @@ public class SeckillController {
      * @return 返回系统时间
      */
     @GetMapping("/time/now")
+    @ResponseBody
     public SeckillResult<Long> time(){
         Date now = new Date();
         return new SeckillResult<>(true, now.getTime());
