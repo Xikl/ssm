@@ -38,7 +38,7 @@ var seckill = {
                         $(this).addClass('disabled');
                         //发送ur请求
                         $.post(seckillUrl, {}, function (result) {
-                            if (result && result['success']){
+                            if (result){
                                 //获得秒杀结果
                                 var seckillResult = result['data'];
                                 var state = seckillResult['state'];

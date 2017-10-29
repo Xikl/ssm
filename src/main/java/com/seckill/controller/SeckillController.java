@@ -101,9 +101,11 @@ public class SeckillController {
         } catch (SeckillCloseException e) {
             SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStateEnums.END);
             result = new SeckillResult<>(false, seckillExecution);
+            log.error("【执行秒杀】秒杀已经关闭, result={}", result);
         } catch (RepeatException e) {
             SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStateEnums.REPEAT_KILL);
             result = new SeckillResult<>(false, seckillExecution);
+            log.error("【执行秒杀】重复秒杀, result={}", result);
         } catch (SeckillException e) {
             log.error("【执行秒杀】 执行秒杀错误， message={}", e.getMessage());
             SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStateEnums.INNER_ERROR);
