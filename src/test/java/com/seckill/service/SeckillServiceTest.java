@@ -68,8 +68,8 @@ public class SeckillServiceTest {
      */
     @Test
     public void testSeckillLogic() throws Exception{
-        long id = 1000L;
-        long phone = 15088654692L;
+        long id = 1003L;
+        long phone = 15089654692L;
         //暴露秒杀接口 主要靠时间来判定
         Exposer exposer = seckillService.exportSeckillUrl(id);
         log.info("exposer={}", exposer);
