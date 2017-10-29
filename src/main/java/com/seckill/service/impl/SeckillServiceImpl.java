@@ -63,6 +63,7 @@ public class SeckillServiceImpl implements SeckillService{
      */
     @Override
     public Exposer exportSeckillUrl(Long seckillId) {
+        //缓存优化：redis
         Seckill seckill = getById(seckillId);
         if(seckill == null){
             return new Exposer(false, seckillId);
