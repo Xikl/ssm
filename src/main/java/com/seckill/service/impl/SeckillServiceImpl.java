@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Service
 @Slf4j
-public class SeckillServiceImpl implements SeckillService{
+public class SeckillServiceImpl implements SeckillService {
 
     @Autowired
     private SeckillDao seckillDao;
@@ -35,7 +35,9 @@ public class SeckillServiceImpl implements SeckillService{
     @Autowired
     private SuccessKilledDao successKilledDao;
 
-    /** 注入redisDao 实现缓存*/
+    /**
+     * 注入redisDao 实现缓存
+     */
     @Autowired
     private RedisDao redisDao;
 
@@ -63,6 +65,7 @@ public class SeckillServiceImpl implements SeckillService{
     /**
      * 秒杀开启时 输出秒杀接口， 否侧输出系统时间秒杀时间
      * 优化缓存机制
+     *
      * @param seckillId 商品id
      * @return exposer DTO
      */
@@ -70,11 +73,11 @@ public class SeckillServiceImpl implements SeckillService{
     public Exposer exportSeckillUrl(Long seckillId) {
         //缓存优化：redis
         Seckill seckill = redisDao.getSeckill(seckillId);
-        if(seckill == null){
+        if (seckill == null) {
             //从数据库中获取
             seckill = getById(seckillId);
             //数据库中都没有那就直接返回false
-            if(seckill == null){
+            if (seckill == null) {
                 return new Exposer(false, seckillId);
             }
             //添加到缓存中
@@ -84,8 +87,8 @@ public class SeckillServiceImpl implements SeckillService{
         Date endTime = seckill.getEndTime();
         //获得系统时间
         Date currentTime = new Date();
-        if(currentTime.getTime() < startTime.getTime() ||
-                endTime.getTime() < currentTime.getTime()){
+        if (currentTime.getTime() < startTime.getTime() ||
+                endTime.getTime() < currentTime.getTime()) {
             return new Exposer(false, seckillId,
                     currentTime.getTime(), startTime.getTime(), endTime.getTime());
         }
@@ -100,18 +103,16 @@ public class SeckillServiceImpl implements SeckillService{
      * @param seckillId 商品id
      * @param userPhone 用户手机号
      * @param md5       用户地址
-     * @throws SeckillException
-     * 使用声明式事务的优点
-     * 1.开发团队的达成一致约定，明确标注事务方法的编程风格
-     * 2.保证事务方法的执行时间要尽可能短， 同时不要穿插网络操作 比如http和tcp，如果非要的话可以剥离到事务方法之外
-     * 3.不是所得方法都需要事务，如只有一条写入操作或者只读
-     *
+     * @throws SeckillException 使用声明式事务的优点
+     *                          1.开发团队的达成一致约定，明确标注事务方法的编程风格
+     *                          2.保证事务方法的执行时间要尽可能短， 同时不要穿插网络操作 比如http和tcp，如果非要的话可以剥离到事务方法之外
+     *                          3.不是所得方法都需要事务，如只有一条写入操作或者只读
      */
     @Override
     @Transactional
     public SeckillExecution executeSeckill(Long seckillId, Long userPhone, String md5)
-                                                            throws SeckillException {
-        if(md5 == null || ! md5.equals(MD5Util.getMd5(seckillId))){
+            throws SeckillException {
+        if (md5 == null || !md5.equals(MD5Util.getMd5(seckillId))) {
             throw new SeckillException("seckill data rewite");
         }
         //执行秒杀业务逻辑 减库存 记录用户秒杀行为
@@ -121,26 +122,32 @@ public class SeckillServiceImpl implements SeckillService{
 
             //记录购买行为
             Integer insertCount = successKilledDao.insertSuccessKilled(seckillId, userPhone);
-            if(insertCount <= 0){
+            if (insertCount <= 0) {
                 throw new RepeatException("seckill repeat");
-            }else{
+            } else {
                 //减库存
                 Integer updateCount = seckillDao.reduceNumber(seckillId, currentTime);
-                if (updateCount <= 0){
+                if (updateCount <= 0) {
                     //没有更新记录 rollback
                     throw new SeckillCloseException("Seckill is closed");
-                }else{
+                } else {
                     //commit
                     SuccessKilled successKilled = successKilledDao.queryByIdWithSekcill(seckillId, userPhone);
                     return new SeckillExecution(seckillId, SeckillStateEnums.SUCCESS, successKilled);
                 }
             }
-        } catch(SeckillCloseException | RepeatException e){
+        } catch (SeckillCloseException | RepeatException e) {
             throw e;
         } catch (Exception e) {
             log.error("未知异常， e={}", e);
             //所有的异常
-            throw new SeckillException("seckill inner error："+e.getMessage());
+            throw new SeckillException("seckill inner error：" + e.getMessage());
         }
+    }
+
+    @Override
+    public SeckillExecution executeSeckillByProcedure(Long seckillId, Long userPhone, String md5)
+            throws SeckillException {
+        return null;
     }
 }
