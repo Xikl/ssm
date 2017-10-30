@@ -52,8 +52,7 @@ public interface SeckillService {
      * @param md5 用户地址
      * @throws SeckillException
      */
-    SeckillExecution executeSeckillByProcedure(Long seckillId, Long userPhone, String md5)
-            throws SeckillException;
+    SeckillExecution executeSeckillByProcedure(Long seckillId, Long userPhone, String md5);
 
 
 }

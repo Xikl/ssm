@@ -145,9 +145,20 @@ public class SeckillServiceImpl implements SeckillService {
         }
     }
 
+    /**
+     * 使用存储过程的秒杀逻辑
+     * @param seckillId 商品id
+     * @param userPhone 用户手机号
+     * @param md5 用户地址
+     * @return
+     */
     @Override
-    public SeckillExecution executeSeckillByProcedure(Long seckillId, Long userPhone, String md5)
-            throws SeckillException {
+    public SeckillExecution executeSeckillByProcedure(Long seckillId, Long userPhone, String md5) {
+        if(md5 == null || !md5.equals(MD5Util.getMd5(seckillId))){
+            return new SeckillExecution(seckillId, SeckillStateEnums.DATA_REWRITES);
+        }
+        Date killTime = new Date();
+        seckillDao.
         return null;
     }
 }
