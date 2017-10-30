@@ -127,15 +127,14 @@ public class SeckillServiceImpl implements SeckillService{
                 //减库存
                 Integer updateCount = seckillDao.reduceNumber(seckillId, currentTime);
                 if (updateCount <= 0){
-                    //没有更新记录
+                    //没有更新记录 rollback
                     throw new SeckillCloseException("Seckill is closed");
                 }else{
+                    //commit
                     SuccessKilled successKilled = successKilledDao.queryByIdWithSekcill(seckillId, userPhone);
                     return new SeckillExecution(seckillId, SeckillStateEnums.SUCCESS, successKilled);
                 }
             }
-
-
         } catch(SeckillCloseException | RepeatException e){
             throw e;
         } catch (Exception e) {
