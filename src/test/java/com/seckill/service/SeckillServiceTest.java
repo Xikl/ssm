@@ -83,5 +83,19 @@ public class SeckillServiceTest {
 
     }
 
+    @Test
+    public void testExecuteSeckillByProcedure(){
+        Long seckillId = 1001L;
+        Long phone = 16645788485L;
+        Exposer exposer = seckillService.exportSeckillUrl(seckillId);
+        String md5;
+        if(exposer.isExposed()){
+            md5 = exposer.getMd5();
+            SeckillExecution seckillExecution = seckillService.executeSeckillByProcedure(seckillId, phone, md5);
+            log.info(seckillExecution.getStateInfo());
+        }
+    }
+
+
 
 }

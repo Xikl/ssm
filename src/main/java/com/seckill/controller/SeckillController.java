@@ -96,7 +96,8 @@ public class SeckillController {
         }
         SeckillResult<SeckillExecution> result;
         try {
-            SeckillExecution seckillExecution = seckillService.executeSeckill(seckillId, killPhone, md5);
+            /*通过存储过程来调用*/
+            SeckillExecution seckillExecution = seckillService.executeSeckillByProcedure(seckillId, killPhone, md5);
             result = new SeckillResult<>(true, seckillExecution);
         } catch (SeckillCloseException e) {
             SeckillExecution seckillExecution = new SeckillExecution(seckillId, SeckillStateEnums.END);

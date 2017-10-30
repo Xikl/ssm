@@ -164,6 +164,12 @@
       <version>1.0.8</version>
     </dependency>
 
+    <!--引入一个map的工具包-->
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2</version>
+    </dependency>
 
   </dependencies>
 

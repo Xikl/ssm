@@ -14,12 +14,15 @@ import com.seckill.exception.SeckillException;
 import com.seckill.service.SeckillService;
 import com.seckill.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 朱文赵
@@ -158,7 +161,25 @@ public class SeckillServiceImpl implements SeckillService {
             return new SeckillExecution(seckillId, SeckillStateEnums.DATA_REWRITES);
         }
         Date killTime = new Date();
-        seckillDao.
-        return null;
+        Map<String, Object> paramMap = new HashMap<>(4);
+        paramMap.put("seckillId", seckillId);
+        paramMap.put("phone", userPhone);
+        paramMap.put("killTime", killTime);
+        paramMap.put("result", null);
+        //执行完存储过程之后 result被赋值
+        try {
+            seckillDao.killByProcedure(paramMap);
+            //通过mapUtil来获得result的属性
+            Integer result = MapUtils.getInteger(paramMap, "result", -2);
+            if(result == 1){
+                SuccessKilled successKilled = successKilledDao.queryByIdWithSekcill(seckillId, userPhone);
+                return new SeckillExecution(seckillId, SeckillStateEnums.SUCCESS, successKilled);
+            }else{
+                return new SeckillExecution(seckillId, SeckillStateEnums.stateOf(result));
+            }
+        } catch (Exception e) {
+            log.error("【执行秒杀】执行存储过程错误， message={}", e.getMessage());
+            return new SeckillExecution(seckillId, SeckillStateEnums.INNER_ERROR);
+        }
     }
 }
