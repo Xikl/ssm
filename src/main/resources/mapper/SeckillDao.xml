@@ -12,11 +12,13 @@
         AND end_time >= #{killTime}
         AND number > 0;
     </update>
-    
+
+    <!--parameterType可以不写-->
     <select id="queryById" resultType="Seckill" parameterType="Long">
         SELECT * FROM seckill where seckill_id=#{seckillId}
     </select>
-    
+
+    <!--返回结果为list 但是其实本质是Seckill类型-->
     <select id="queryAll" resultType="Seckill">
         SELECT * FROM seckill ORDER BY create_time DESC
         LIMIT #{offset},#{limit}

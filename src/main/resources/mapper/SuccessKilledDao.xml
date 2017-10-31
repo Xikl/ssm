@@ -14,6 +14,7 @@
     <select id="queryByIdWithSekcill" resultType="SuccessKilled">
         /*根据id查询SuccessKilled并且携带Seckill的属性*/
         /*如何告诉mybatis将结果映射到SuccessKilled 摒弃携带Seckill属性*/
+        /*将seckill的查询结果赋值到结果集中*/
         select
             sk.seckill_id,
             sk.user_phone,
